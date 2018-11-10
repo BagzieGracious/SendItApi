@@ -10,6 +10,6 @@ omit =
     */api/config/*
     */api/controllers/*
     */api/models/*
-    */api/__init__.py
+    *__init__.py
     */api/tests/__init__.py
     *run.py
