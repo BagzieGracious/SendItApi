@@ -41,9 +41,8 @@ class DataValidation:
         """
         Methods that checks if any element is empty
         """
-        if self.req['user_id'] != '' and self.req['description'] != '' and self.req['product'] != '':
-            if self.req['description'] != '' and self.req['pickup'] != '' and self.req['weight'] != '':
-                return True
+        if self.req['user_id'] != '' and self.req['description'] != '' and self.req['product'] != '' and self.req['description'] != '' and self.req['pickup'] != '' and self.req['weight'] != '':
+            return True
         msg = 'no empty values are allowed'
         DataValidation.error_msg['error']['message'] = msg
         return jsonify(DataValidation.error_msg), 400
