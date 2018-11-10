@@ -9,3 +9,4 @@ omit =
     */mymodule/tests/*
     *run.py
     *__init__.py
+    *api/config/routes.py/*
