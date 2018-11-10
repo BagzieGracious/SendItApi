@@ -7,9 +7,5 @@ omit =
     */venv/*
     */home/travis/virtualenv/*
     */mymodule/tests/*
-    */api/config/*
-    */api/controllers/*
-    */api/models/*
-    *__init__.py
-    */api/tests/__init__.py
     *run.py
+    *__init__.py
