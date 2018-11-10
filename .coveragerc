@@ -9,4 +9,9 @@ omit =
     */mymodule/tests/*
     *run.py
     *__init__.py
-    *routes.py*
+    *routes.py
+    *config.py
+    *data_validation.py
+    *controller.py
+    *model.py
+    *create_order.py
