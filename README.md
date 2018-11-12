@@ -23,7 +23,7 @@ SendIT is a courier service that helps users deliver parcels to different destin
     Get /parcels/<int:parcel_id>                 | Fetch a specific parcel delivery order
     POST /users/<int:user_id>/parcels            | Fetch all parcel delivery orders by a specific user
     PUT /parcels/<int:parcel_id>/cancel/         | Cancel the specific parcel delivery order
-    POST /parcels/                               | Cancel the specific parcel delivery order
+    POST /parcels/                               | Create a parcel delivery order
     
 **Getting started with the app**
 
