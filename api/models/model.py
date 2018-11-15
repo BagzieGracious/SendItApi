@@ -10,40 +10,43 @@ class Model:
     lsts = []
     userLst = []
 
-    def get_order(self, order_id=None):
+    def get_order(self):
         """
         method for get data from data structures
         """
-        if order_id is None:
-            return jsonify({"success":True, "data":Model.lsts}), 200
-        for order in Model.lsts:
-            if order.get('order_id') == order_id:
-                return jsonify({"success":True, "data":order}), 200
-        return jsonify({"success":False, "error":{"message": "order not found"}}), 404
+        return jsonify({"success":True, "data":Model.lsts}), 200
 
-    def get_order_user(self, user_id):
+    def get_single_order(self, order_id, user_id):
+        for order in Model.lsts:
+            if str(order['order_id']) == order_id and order['user_id'] == user_id:
+                return jsonify({"success": True, "data": order}), 200
+        return jsonify({"success": False, "error": {"message": "order not found"}}), 404
+
+    def get_order_user(self, usr, user_id):
         """
         Methods for get data posted by a specific user
         """
-        for order in Model.lsts:
-            if order.get('user_id') == user_id:
-                Model.userLst.append(order)
-            else:
-                Model.userLst.clear()
+        if str(usr) == user_id:
+            for order in Model.lsts:
+                if str(order['user_id']) == user_id:
+                    Model.userLst.append(order)
+                else:
+                    Model.userLst.clear()
 
-        if len(Model.userLst) > 0:
-            return jsonify({"success":True, "data":Model.userLst}), 200
+            if len(Model.userLst) > 0:
+                return jsonify({"success":True, "data":Model.userLst}), 200
         return jsonify({"success":False, "error":{"message": "order not found"}}), 404
 
 
-    def cancel_order(self, order_id):
+    def cancel_order(self, order_id, user_id):
         """
         Method for cancelling parcel delivery order
         """
         for order in Model.lsts:
-            if order.get('order_id') == order_id:
-                order['status'] = 'cancelled'
-                return jsonify({"success":True, "data":order}), 200
+            if order['user_id'] == user_id:
+                if str(order['order_id']) == order_id:
+                    order['status'] = 'cancelled'
+                    return jsonify({"success":True, "data":order}), 200
         return jsonify({"success":False, "error":{"message": "order not found"}}), 404
 
     def create_order(self, order):
@@ -52,3 +55,9 @@ class Model:
         """
         Model.lsts.append(order)
         return jsonify({"success":True, "data":order}), 201
+
+    def check_for_exist(self,user_id, product, destination ):
+        for order in Model.lsts:
+            if order['user_id'] == user_id and order['product'] == product and order['destination'] == destination:
+                return jsonify({"success": False, "error": {"message": "you have created that order previously"}}), 400
+        return False
