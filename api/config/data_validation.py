@@ -7,61 +7,58 @@ class DataValidation:
     """
     Class with methods to return validation values
     """
-
     error_msg = {"success":False, "error":{"message":""}}
 
-    def __init__(self, req):
+    def __init__(self, req, type):
         """
-        Class constructor for intiating a request object
+        Constructor for initializing datavaldation class
         """
         self.req = req
+        self.data = self.req.get_json()
+        self.type = type
 
-    def string_error(self):
+    def err(self, msg):
         """
-        Method that checks for string errorss
+        Method returns general error message
         """
-        if isinstance(self.req['pickup'], str) and isinstance(self.req['destination'], str):
-            if isinstance(self.req['description'], str) and isinstance(self.req['product'], str):
-                return True
-        msg = 'pickup, destination, description and product should be string values'
         DataValidation.error_msg['error']['message'] = msg
-        return jsonify(DataValidation.error_msg), 400
+        return DataValidation.error_msg
 
-    def integer_error(self):
+    def string_check(self, lst):
         """
-        Method that checks for integer errors
+        Method for checking strings criteria
         """
-        if isinstance(self.req['user_id'], int) and isinstance(self.req['weight'], int):
-            return True
-        msg = 'user_id and weight should be integers'
-        DataValidation.error_msg['error']['message'] = msg
-        return jsonify(DataValidation.error_msg), 400
-
-    def empty_keys(self):
-        """
-        Methods that checks if any element is empty
-        """
-        if self.req['user_id'] != '' and self.req['description'] != '' and self.req['product'] != '' and self.req['description'] != '' and self.req['pickup'] != '' and self.req['weight'] != '':
-            return True
-        msg = 'no empty values are allowed'
-        DataValidation.error_msg['error']['message'] = msg
-        return jsonify(DataValidation.error_msg), 400
-
-    def lesser_zero(self):
-        """
-        Methods that checks if user_id or weight is less than zero
-        """
-        if self.req['user_id'] > 0 and self.req['weight'] > 0:
-            return True
-        msg = 'user_id and weight should be greater than zero'
-        DataValidation.error_msg['error']['message'] = msg
-        return jsonify(DataValidation.error_msg), 400
+        for error in lst:
+            if not isinstance(error, str):
+                return jsonify(self.err('username, email, and password should be a string')), 400
+        return True
 
     def validate(self):
         """
-        Methods that returns validity values for posted data
+        Method for validating inputs
         """
-        if isinstance(self.string_error(), bool) and isinstance(self.integer_error(), bool):
-            if isinstance(self.empty_keys(), bool) and isinstance(self.lesser_zero(), bool):
-                return True
-        return jsonify(DataValidation.error_msg), 400
+        if self.type == 'user':
+            if self.req.content_type == 'application/json':
+                key = ['email', 'username', 'password']
+                if set(key).issubset(self.data):
+                    if isinstance(self.data['email'], str) and isinstance(self.data['username'], str) and isinstance(self.data['password'], str):
+                        if self.data['email'] != '' and self.data['username'] != '' and self.data['password'] != '':
+                            return True
+                        return jsonify(self.err('no field should be empty')), 400
+                    return jsonify(self.err('email, username and password should be a string')), 400
+                return jsonify(self.err('some field is missing (email, password, username)')), 400
+            return jsonify(self.err('only json data is allowed')), 400
+
+        if self.type == 'order':
+            if self.req.content_type == 'application/json':
+                key = ['pickup', 'destination', 'description', 'weight', 'product']
+                if set(key).issubset(self.data):
+                    if isinstance(self.data['weight'], int) and self.data['weight'] > 0:
+                        if isinstance(self.data['pickup'], str) and isinstance(self.data['description'], str) and isinstance(self.data['destination'], str) and isinstance(self.data['product'], str):
+                            if self.data['pickup'] != '' and self.data['description'] != '' and self.data['destination'] and self.data['product'] != '' and self.data['weight'] != '':
+                                return True
+                            return jsonify(self.err('no field should be empty')), 400
+                        return jsonify(self.err('pickup, destination, description, and product should be a string')), 400
+                    return jsonify(self.err('weight should be an integer and above 0')), 400
+                return jsonify(self.err('some field is missing')), 400
+            return jsonify(self.err('only json data is allowed')), 400
