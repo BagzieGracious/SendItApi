@@ -66,3 +66,7 @@ class Routes:
         @app.route('/api/v1/users', methods=['GET'], strict_slashes=False)
         def get_users():
             return self.controller.get_users()
+        
+        @app.route('/')
+        def index():
+            return "<h1>Welcome to Send-It</h1> <p>The easy way to track your delivery.</p>"
