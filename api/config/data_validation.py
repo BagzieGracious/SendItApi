@@ -3,11 +3,12 @@ Module to return validations values
 """
 from flask import jsonify
 
+
 class DataValidation:
     """
     Class with methods to return validation values
     """
-    error_msg = {"success":False, "error":{"message":""}}
+    error_msg = {"status": 'failure', "error":{"message":""}}
 
     def __init__(self, req, type):
         """
