@@ -24,15 +24,15 @@ class Users:
             "password": generate_password_hash(password, method='sha256')
         }
         Users.users.append(user)
-        return jsonify({"success":True, "data": user}), 201
+        return jsonify({"status": "success", "data": user}), 201
 
     def get_all_users(self):
         """
         Method for getting all users from data structures
         """
         if len(Users.users) < 1:
-            return jsonify({"success":False, "error":{"message": "no user available"}}), 404
-        return jsonify({"success":True, "data":Users.users}), 200
+            return jsonify({"status": "failure", "error": {"message": "no user available"}}), 404
+        return jsonify({"status": "success", "data": Users.users}), 200
 
     def check_user_details(self, username, email):
         """
@@ -40,7 +40,7 @@ class Users:
         """
         for user in Users.users:
             if user['username'] == username or user['email'] == email:
-                return jsonify({"success":False, "error":{"message": "username or email already exists"}}), 403
+                return jsonify({"status": "failure", "error": {"message": "username or email already exists"}}), 403
         return False
 
     def check_credentials(self, username, password):
@@ -51,7 +51,7 @@ class Users:
             if user['username'] == username:
                 if check_password_hash(user['password'], password):
                     return True
-        return jsonify({"success":False, "error":{"message": "invalid username or password"}}), 403
+        return jsonify({"status": "failure", "error": {"message": "invalid username or password"}}), 403
 
     def get_user_id(self, username):
         """
