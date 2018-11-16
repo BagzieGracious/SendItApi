@@ -58,7 +58,7 @@ class TestView(TestCase):
 
         resp = json.loads(post.data)
         self.assertEqual(resp['data']['status'], 'pending')
-        self.assertEqual(resp['success'], True)
+        self.assertEqual(resp['status'], 'success')
         self.assertEqual(post.status_code, 201)
 
     def test_string_error(self):
@@ -79,7 +79,7 @@ class TestView(TestCase):
         )
 
         resp = json.loads(post.data)
-        self.assertEqual(resp['success'], False)
+        self.assertEqual(resp['status'], 'failure')
         self.assertEqual(resp['error']['message'], 'weight should be an integer and above 0')
         self.assertEqual(post.status_code, 400)
 
@@ -101,7 +101,7 @@ class TestView(TestCase):
         )
 
         resp = json.loads(post.data)
-        self.assertEqual(resp['success'], False)
+        self.assertEqual(resp['status'], 'failure')
         self.assertEqual(resp['error']['message'], 'pickup, destination, description, and product should be a string')
         self.assertEqual(post.status_code, 400)
 
@@ -123,7 +123,7 @@ class TestView(TestCase):
         )
 
         resp = json.loads(post.data)
-        self.assertEqual(resp['success'], False)
+        self.assertEqual(resp['status'], 'failure')
         self.assertEqual(resp['error']['message'], 'no field should be empty')
         self.assertEqual(post.status_code, 400)
 
@@ -144,7 +144,7 @@ class TestView(TestCase):
         )
 
         resp = json.loads(post.data)
-        self.assertEqual(resp['success'], False)
+        self.assertEqual(resp['status'], 'failure')
         self.assertEqual(resp['error']['message'], 'some field is missing')
         self.assertEqual(post.status_code, 400)
 
@@ -165,7 +165,7 @@ class TestView(TestCase):
         )
 
         resp = json.loads(post.data)
-        self.assertEqual(resp['success'], False)
+        self.assertEqual(resp['success'], 'failure')
         self.assertEqual(resp['error']['message'], 'only json data is allowed')
         self.assertEqual(post.status_code, 400)
 
@@ -180,7 +180,7 @@ class TestView(TestCase):
         )
 
         resp = json.loads(post.data)
-        self.assertEqual(resp['success'], True)
+        self.assertEqual(resp['status'], 'success')
         self.assertEqual(post.status_code, 200)
 
     def test_single_order(self):
@@ -194,7 +194,7 @@ class TestView(TestCase):
         )
 
         resp = json.loads(post.data)
-        self.assertEqual(resp['success'], False)
+        self.assertEqual(resp['status'], 'failure')
         self.assertEqual(post.status_code, 404)
 
     def test_user_order(self):
@@ -208,7 +208,7 @@ class TestView(TestCase):
         )
 
         resp = json.loads(post.data)
-        self.assertEqual(resp['success'], False)
+        self.assertEqual(resp['status'], 'failure')
         self.assertEqual(post.status_code, 404)
 
     def test_cancel_order(self):
@@ -222,5 +222,5 @@ class TestView(TestCase):
         )
 
         resp = json.loads(post.data)
-        self.assertEqual(resp['success'], False)
+        self.assertEqual(resp['status'], 'failure')
         self.assertEqual(post.status_code, 404)
