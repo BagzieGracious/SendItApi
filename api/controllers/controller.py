@@ -32,7 +32,7 @@ class Controller:
                 'user': data['username'],
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
             }, self.security_key)
-            return jsonify({"success": True, "message": "logged in successfully", "token":token.decode('UTF-8')}), 200
+            return jsonify({"status": 'success', "message": "logged in successfully", "token":token.decode('UTF-8')}), 200
         return Users().check_credentials(data['username'], data['password'])
 
     def signup(self):
