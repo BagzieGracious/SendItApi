@@ -4,7 +4,8 @@ Module for rendering routes
 from flask import request, jsonify
 from api.controllers.controller import Controller
 import jwt
-from functools import  wraps
+from functools import wraps
+
 
 class Routes:
     """
@@ -25,11 +26,11 @@ class Routes:
                 if 'token_value' in request.headers:
                     token = request.headers['token_value']
                 else:
-                    return jsonify({"success": False, "error": {"message": "Login, inorder to access this view"}}), 400
+                    return jsonify({"status": "failure", "error": {"message": "Login, in-order to access this view"}}), 400
                 try:
                     jwt.decode(token, 'json_web_token')
                 except:
-                    return jsonify({"success": False, "error": {"message": "Invalid, token"}}), 400
+                    return jsonify({"status": "failure", "error": {"message": "Invalid, token"}}), 400
                 return func(*args, **kwargs)
             return decorated
 
@@ -66,7 +67,3 @@ class Routes:
         @app.route('/api/v1/users', methods=['GET'], strict_slashes=False)
         def get_users():
             return self.controller.get_users()
-        
-        @app.route('/')
-        def index():
-            return "<h1>Welcome to Send-It</h1> <p>The easy way to track your delivery.</p>"
