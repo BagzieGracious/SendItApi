@@ -165,7 +165,7 @@ class TestView(TestCase):
         )
 
         resp = json.loads(post.data)
-        self.assertEqual(resp['success'], 'failure')
+        self.assertEqual(resp['status'], 'failure')
         self.assertEqual(resp['error']['message'], 'only json data is allowed')
         self.assertEqual(post.status_code, 400)
 
